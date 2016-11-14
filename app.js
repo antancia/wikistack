@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 var nunjucks = require('nunjucks');
 var path = require('path');
 var models = require('./models')
+var wikiRouter = require('./routes/wiki');
 
 var env = nunjucks.configure('views', {noCache: true});
 app.set('view engine', 'html');
@@ -14,7 +15,9 @@ app.use(morgan('dev'));
 
 app.use(express.static(path.join('/public')));
 
-app.use('/', function (req, res, next) {
+app.use('/wiki', wikiRouter);
+
+app.get('/', function(req, res, next){
 	res.render('index');
 })
 

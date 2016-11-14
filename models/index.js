@@ -1,5 +1,6 @@
 var Sequelize = require('sequelize');
 var db = new Sequelize('postgres://localhost:5432/wikistack', {
+	//can be set to false after dev is over an SQL does not need to be logged out
 	logging: true
 });
 
@@ -19,6 +20,12 @@ var Page = db.define('page', {
 	status: {
 		type: Sequelize.ENUM('open', 'closed')
 	}
+},
+
+	{
+  	getterMethods   : {
+    route       : function()  { return '/wiki/' + this.getDataValue('urlTitle') }
+	}		
 });
 
 var User = db.define('user', {
