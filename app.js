@@ -6,6 +6,7 @@ var nunjucks = require('nunjucks');
 var path = require('path');
 var models = require('./models')
 var wikiRouter = require('./routes/wiki');
+var Page = models.Page;
 
 var env = nunjucks.configure('views', {noCache: true});
 app.use(bodyParser.json()); 
@@ -21,7 +22,15 @@ app.use(express.static(path.join('/public')));
 app.use('/wiki', wikiRouter);
 
 app.get('/', function(req, res, next){
-	res.render('index');
+	
+	Page.findAll()
+	.then(function(pageArr) {
+		res.render('index', {
+			pages: pageArr
+		});
+	})
+
+	//res.render('index');
 })
 
 

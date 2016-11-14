@@ -21,12 +21,19 @@ var Page = db.define('page', {
 		type: Sequelize.ENUM('open', 'closed')
 	}
 },
-
 	{
   	getterMethods   : {
     route       : function()  { return '/wiki/' + this.getDataValue('urlTitle') }
 	}		
 });
+
+Page.hook('beforeValidate', function(req) {
+
+	var title = req.urlTitle.replace(/ /g, '_').replace(/\W/g, '');
+	var newTitle = title ? title : 'title';
+
+	req.urlTitle = newTitle;
+})
 
 var User = db.define('user', {
 	name: {
