@@ -8,6 +8,9 @@ var models = require('./models')
 var wikiRouter = require('./routes/wiki');
 
 var env = nunjucks.configure('views', {noCache: true});
+app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({extended: false}));
+
 app.set('view engine', 'html');
 app.engine('html', nunjucks.render);
 

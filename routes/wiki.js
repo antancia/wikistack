@@ -2,13 +2,14 @@
 
 var express = require('express');
 var router = express.Router();
-var bodyParser = require('body-parser');
+var models = require('../models');
+var Page = models.Page; 
+var User = models.User; 
 
 module.exports = router;
 
 var nunjucks = require('nunjucks');
 var env = nunjucks.configure('views', {noCache: true});
-router.use(bodyParser.json()); 
 
 router.get('/', function (req,res, next){
 	// var allUsers = Todos.listPeople();
@@ -28,7 +29,24 @@ router.get('/add', function (req,res, next){
 
 router.post('/', function (req,res, next){
 	// var allUsers = Todos.listPeople();
-	console.log(req.body);
-	res.json(req.body);
 	//next();
+
+	var titleFunction = function (reqTitle) {
+		var title = reqTitle.replace(/ /g, '_').replace(/\W/g, '');
+		var urlTitle = title ? title : 'title';
+
+		return urlTitle;
+	}
+
+	var page = Page.build({
+    	title: req.body.title,
+    	content: req.body.content,
+    	status: req.body.status,
+    	urlTitle: titleFunction(req.body.title)
+  	});
+
+	  page.save();
+	// console.log(req.body);
+	// res.json(req.body);
 });
+
